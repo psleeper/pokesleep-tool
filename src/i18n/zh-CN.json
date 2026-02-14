@@ -427,6 +427,7 @@
         "export message1": "盒子里的宝可梦信息被保存在浏览器上，因此不会被同步到其他环境。",
         "export message2": "要将盒子中的宝可梦转移到另一个环境，请在目标环境中导入以下数据。",
         "export notice": "建议定期导出盒子中的宝可梦数据。",
+        "readonly_mode_notice": "只读模式：盒子数据已嵌入且无法修改。",
         "box data": "盒子详情",
         "copy to clipboard": "复制到剪贴板",
         "copied to clipboard": "已复制到剪贴板。",

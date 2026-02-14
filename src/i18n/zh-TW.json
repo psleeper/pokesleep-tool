@@ -429,6 +429,7 @@
         "export message1": "盒子裡的寶可夢情报被保存在瀏覽器上，因此不會被同步到其他環境。",
         "export message2": "要將盒子中的寶可夢轉移到另一個環境，請在目標環境中導入以下數據。",
         "export notice": "建議定期導出盒子中的寶可夢數據。",
+        "readonly_mode_notice": "唯讀模式：寶盒資料已嵌入且無法修改。",
         "box data": "盒子詳情",
         "copy to clipboard": "複製到剪貼簿",
         "copied to clipboard": "已複製到剪貼簿。",
