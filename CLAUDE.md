@@ -83,6 +83,36 @@ Vite builds 10 HTML entry points (2 apps × 5 languages) with code splitting:
 - `react` chunk - React and other node_modules
 - `resource` chunk - Game data and i18n files
 
+### Readonly Mode Feature
+
+Readonly Mode enables embedding Pokémon box data directly into the application build for view-only sharing purposes.
+
+**Purpose**: Create distributable versions of the app with pre-configured Pokémon box data that users can view and analyze but not modify. Useful for sharing team recommendations, analysis results, or educational examples.
+
+**Environment Variable**: `VITE_READONLY_MODE=true` activates readonly mode during the build process.
+
+**Build Configuration**: 
+- Vite injects the environment variable via `vite.config.ts` line 10
+- Environment variable is available as `import.meta.env.VITE_READONLY_MODE` in the application code
+
+**Implementation Details**:
+- **`src/util/PokemonBox.ts`**: Core readonly logic
+  - `isReadonlyMode()` method checks `import.meta.env.VITE_READONLY_MODE` 
+  - Blocks all write operations when in readonly mode: `add()`, `remove()`, `set()`, `save()`
+  - `loadEmbeddedData()` fetches data from `embedded-box.txt` instead of localStorage
+  - Readonly mode detected at runtime based on build-time environment variable
+
+**UI Changes in Readonly Mode**:
+- **`BoxView.tsx`**: Hides the Add FAB (Floating Action Button) when `box.isReadonlyMode()` returns true
+- **`StrengthParameterForm.tsx`**: Displays an informational alert explaining readonly mode, hides the initialize button
+- **`IvCalcApp.tsx`**: Hides the import dialog functionality to prevent data modification
+- **`BoxLargeItem.tsx`**: Passes readonly state to child components, disabling edit controls
+
+**Data File**: 
+- `embedded-box.txt` in project root contains the exported Pokémon box data in JSON format
+- This file is loaded via fetch request when the app starts in readonly mode
+- The file should be created by exporting data from the IV Calculator's Box tab
+
 ## Key Patterns
 
 ### State Management in IvCalc

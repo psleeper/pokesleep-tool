@@ -32,6 +32,77 @@ Your app is ready to be deployed!
 
 Runs unit tests.
 
+## Readonly Mode
+
+Readonly Mode is a special build mode that embeds Pokémon box data directly into the application code, creating a view-only version for sharing purposes.
+
+### What is Readonly Mode
+
+Readonly Mode allows you to distribute pre-configured Pokémon box data with the application. Users can view and analyze the embedded data, but cannot modify, add, or delete Pokémon from the box. This makes it ideal for sharing team recommendations, analysis results, or reference configurations.
+
+### Use Case
+
+- Share optimized team compositions with the community
+- Distribute analysis results with embedded Pokémon data
+- Create reference builds showcasing specific strategies
+- Provide examples for educational or documentation purposes
+
+### How to Build with Readonly Mode
+
+1. **Export your Pokémon box data**:
+   - Open the IV Calculator in your browser
+   - Navigate to the Box tab
+   - Use the Export function to download your box data
+
+2. **Prepare the data file**:
+   - Copy the exported JSON data to `embedded-box.txt` in the project root directory
+
+3. **Build with readonly mode enabled**:
+   ```bash
+   VITE_READONLY_MODE=true npm run build
+   ```
+
+### Behavior in Readonly Mode
+
+When running in readonly mode, the application has the following characteristics:
+
+- **Hidden Controls**: Add, Edit, and Delete buttons are hidden from the interface
+- **Import Disabled**: The import function is disabled to prevent data modification
+- **Embedded Data**: Box data loads from `embedded-box.txt` instead of localStorage
+- **Preserved Features**: Export and all calculation features continue to work normally
+
+Users can still:
+- View all embedded Pokémon data
+- Use all calculation tools (RP, Strength, Rating)
+- Export the embedded data for their own use
+- Switch between different tabs and views
+
+### Fork and Deploy Guide
+
+To create your own readonly mode deployment on GitHub Pages:
+
+1. **Fork the repository**:
+   - Click the "Fork" button on the GitHub repository page
+   - Clone your forked repository to your local machine
+
+2. **Prepare your box data**:
+   - Export your Pokémon box data from the IV Calculator
+   - Save the exported JSON data as `embedded-box.txt` in the project root
+   - Commit and push this file to your repository
+
+3. **Configure GitHub Actions**:
+   - Go to your repository Settings → Secrets and variables → Actions
+   - Add a new repository variable named `VITE_READONLY_MODE` with value `true`
+   - Or modify `.github/workflows/deploy.yml` to include `VITE_READONLY_MODE=true` in the build command
+
+4. **Enable GitHub Pages**:
+   - Go to Settings → Pages
+   - Set Source to "GitHub Actions"
+   - The site will be deployed automatically on push to the main branch
+
+5. **Access your deployment**:
+   - Your readonly mode application will be available at `https://[username].github.io/pokesleep-tool/`
+
 ## License
 
 MIT
