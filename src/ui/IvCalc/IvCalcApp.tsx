@@ -117,8 +117,9 @@ const ResearchCalcApp = React.memo(() => {
             onClose={onBoxItemEditDialogClose} onChange={onBoxItemDialogChange}/>
         <BoxExportDialog box={state.box}
             open={state.boxExportDialogOpen} onClose={onBoxExportDialogClose}/>
-        <BoxImportDialog box={state.box}
-            open={state.boxImportDialogOpen} onClose={onBoxImportDialogClose}/>
+        {!state.box.isReadonlyMode() &&
+            <BoxImportDialog box={state.box}
+                open={state.boxImportDialogOpen} onClose={onBoxImportDialogClose}/>}
         <BoxDeleteAllDialog box={state.box}
             open={state.boxDeleteAllDialogOpen} onClose={onBoxDeleteAllDialogClose}/>
         <Snackbar open={state.alertMessage !== ""} message={t(state.alertMessage)}
