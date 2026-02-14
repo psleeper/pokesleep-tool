@@ -6,20 +6,26 @@ import { Button, Dialog, DialogActions, IconButton } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next'
+import PokemonBox from '../util/PokemonBox';
 
-const NewsInfo = React.memo(({appType, onAppConfigChange}: {
-    appType: AppType,
+interface NewsInfoProps {
+    appType: AppType;
     onAppConfigChange: (config: AppConfig) => void;
-}) => {
+    box: PokemonBox;
+}
+
+const NewsInfo = React.memo(({appType, onAppConfigChange, box}: NewsInfoProps) => {
     const { t } = useTranslation();
     const appConfig = React.useContext(AppConfigContext);
+    const [dialogOpen, setDialogOpen] = React.useState(false);
     const onDetailClick = React.useCallback(() => {
         setDialogOpen(true);
     }, []);
     const onCloseDialog = React.useCallback(() => {
         setDialogOpen(false);
     }, []);
-    const [dialogOpen, setDialogOpen] = React.useState(false);
+    
+    if (box.isReadonlyMode()) return null;
     
     const articles = News.getArticles(appType);
     if (articles.length === 0) {

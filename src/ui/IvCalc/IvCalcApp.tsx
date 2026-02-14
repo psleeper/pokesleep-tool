@@ -122,13 +122,13 @@ const ResearchCalcApp = React.memo(() => {
                 open={state.boxImportDialogOpen} onClose={onBoxImportDialogClose}/>}
         <BoxDeleteAllDialog box={state.box}
             open={state.boxDeleteAllDialogOpen} onClose={onBoxDeleteAllDialogClose}/>
-        <Snackbar open={state.alertMessage !== ""} message={t(state.alertMessage)}
-            autoHideDuration={2000} onClose={onAlertMessageClose}/>
-        <Snackbar open={isSelectedItemEdited} message={t('pokemon in the box is edited')}
+        {!state.box.isReadonlyMode() && <Snackbar open={state.alertMessage !== ""} message={t(state.alertMessage)}
+            autoHideDuration={2000} onClose={onAlertMessageClose}/>}
+        {!state.box.isReadonlyMode() && <Snackbar open={isSelectedItemEdited} message={t('pokemon in the box is edited')}
             action={<>
                 <Button onClick={onRestoreClick}>{t('reset')}</Button>
                 <Button onClick={onSaveClick}>{t('save')}</Button>
-            </>}/>
+            </>}/>}
     </>;
 });
 

@@ -10,6 +10,7 @@ import ToolBar from './ToolBar';
 import NewsInfo from './NewsInfo';
 import PwaNotify from './PwaBanner';
 import { useTranslation } from 'react-i18next'
+import PokemonBox from '../util/PokemonBox';
 
 const defaultTheme = createTheme({
     typography: {
@@ -39,6 +40,7 @@ export default function App({config}: {config:AppConfig}) {
     const language = useMultilingual(config);
     const [curApp, setCurApp] = useRouter(language);
     const [appConfig, setAppConfig] = useState(config);
+    const [box] = useState(() => new PokemonBox());
 
     const onAppChange = useCallback((value: AppType) => {
         setCurApp(value);
@@ -66,10 +68,10 @@ export default function App({config}: {config:AppConfig}) {
         <AppConfigContext.Provider value={appConfig}>
             <ToolBar app={curApp} onAppChange={onAppChange}
                 onAppConfigChange={onAppConfigChange}/>
-            <NewsInfo appType={curApp} onAppConfigChange={onAppConfigChange}/>
+            <NewsInfo appType={curApp} onAppConfigChange={onAppConfigChange} box={box}/>
             {curApp === "ResearchCalc" && <ResearchCalcApp/>}
             {curApp === "IvCalc" && <IvCalcApp/>}
-            <PwaNotify app={curApp} pwaCount={config.pwacnt} onClose={onPwaBannerClose}/>
+            <PwaNotify app={curApp} pwaCount={config.pwacnt} onClose={onPwaBannerClose} box={box}/>
         </AppConfigContext.Provider>
     </ThemeProvider>);
 }

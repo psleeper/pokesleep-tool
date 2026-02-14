@@ -5,6 +5,7 @@ import IvCalcIcon from './Resources/IvCalcIcon';
 import SafariIcon from './Resources/SafariIcon';
 import { AppType } from './AppConfig';
 import { copyToClipboard } from '../util/Clipboard';
+import PokemonBox from '../util/PokemonBox';
 import { Button, IconButton, Dialog, DialogContent, DialogTitle,
     Snackbar, DialogActions} from '@mui/material';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
@@ -32,6 +33,8 @@ interface PwaBannerProps {
     pwaCount: number;
     /** Called when user closed this banner  */
     onClose: () => void;
+    /** Pokemon box instance */
+    box: PokemonBox;
 }
 
 /**
@@ -43,7 +46,7 @@ interface PwaBannerProps {
  * iOS
  *   Show orignal UI and tells how to add to home screen.
  */
-const PwaBanner = React.memo(({app, pwaCount, onClose}:PwaBannerProps) => {
+const PwaBanner = React.memo(({app, pwaCount, onClose, box}:PwaBannerProps) => {
     const { t } = useTranslation();
 
     // iOS: show banner if user visits this page iOsShowPwaBannerThreshold times
@@ -94,6 +97,11 @@ const PwaBanner = React.memo(({app, pwaCount, onClose}:PwaBannerProps) => {
     const onCloseMessage = useCallback(() => {
         setIPhoneMessageOpen(false);
     }, [setIPhoneMessageOpen]);
+
+    // Return null in readonly mode
+    if (box.isReadonlyMode()) {
+        return null;
+    }
 
     return (
         <StyledPwaBanner open={open}>
