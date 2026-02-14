@@ -2,6 +2,8 @@
 
 src/data/spo.json
 .cache/
+embedded-box.txt
+
 
 # dependencies
 /node_modules

@@ -1,5 +1,6 @@
 import PokemonIv from './PokemonIv';
 import i18next from 'i18next';
+import embeddedBoxData from '../../embedded-box.txt?raw';
 
 /**
  * Represents Indivisual Values (IV) of the Pokemon.
@@ -37,11 +38,21 @@ class PokemonBox {
     }
 
     /**
+     * Check if readonly mode is enabled.
+     */
+    isReadonlyMode(): boolean {
+        return import.meta.env.VITE_READONLY_MODE === 'true';
+    }
+
+    /**
      * Add a new Pokmeon IV.
      * @param iv Pokemon IV to be added.
      * @returns Added item ID.
      */
     add(iv: PokemonIv, nickname?: string): number {
+        if (this.isReadonlyMode()) {
+            return -1;
+        }
         if (!this.canAdd) {
             throw new Error('max entry count exceeds');
         }
@@ -55,6 +66,9 @@ class PokemonBox {
      * @param id ID.
      */
     remove(id: number) {
+        if (this.isReadonlyMode()) {
+            return;
+        }
         this._entries = this._entries.filter(x => x.id !== id);
     }
 
@@ -72,6 +86,9 @@ class PokemonBox {
      * @param iv New pokemon IV.
      */
     set(id: number, iv: PokemonIv, nickname?: string) {
+        if (this.isReadonlyMode()) {
+            return;
+        }
         for (let i = 0; i < this._entries.length; i++) {
             if (this._entries[i].id === id) {
                 this._entries[i] = new PokemonBoxItem(iv, nickname, id);
@@ -91,34 +108,58 @@ class PokemonBox {
     }
 
     /**
-     * Load box data from local storage.
+     * Load box data from local storage or embedded data.
      */
     load() {
-        const data = localStorage.getItem("PstPokeBox");
-        if (data === null) {
+        try {
+            if (this.isReadonlyMode()) {
+                // Load from embedded data
+                const newItems: PokemonBoxItem[] = [];
+                const lines = embeddedBoxData.split('\n').filter((line: string) => line.trim() !== '');
+                for (const line of lines) {
+                    const data = this.deserializeItem(line);
+                    if (data === null) {
+                        continue;
+                    }
+                    newItems.push(new PokemonBoxItem(data.iv, data.nickname));
+
+                    if (newItems.length >= PokemonBox.maxEntryCount) {
+                        break;
+                    }
+                }
+                this._entries = newItems;
+            } else {
+                // Load from localStorage
+                const data = localStorage.getItem("PstPokeBox");
+                if (data === null) {
+                    return [];
+                }
+                const json = JSON.parse(data);
+                if (!Array.isArray(json)) {
+                    return [];
+                }
+
+                const newItems: PokemonBoxItem[] = [];
+                for (const item of json) {
+                    if (typeof(item) !== "string") {
+                        continue;
+                    }
+                    const data = this.deserializeItem(item);
+                    if (data === null) {
+                        continue;
+                    }
+                    newItems.push(new PokemonBoxItem(data.iv, data.nickname));
+
+                    if (newItems.length >= PokemonBox.maxEntryCount) {
+                        break;
+                    }
+                }
+                this._entries = newItems;
+            }
+        } catch (error) {
+            console.warn('Failed to load Pokemon box data:', error);
             return [];
         }
-        const json = JSON.parse(data);
-        if (!Array.isArray(json)) {
-            return [];
-        }
-
-        const newItems: PokemonBoxItem[] = [];
-        for (const item of json) {
-            if (typeof(item) !== "string") {
-                continue;
-            }
-            const data = this.deserializeItem(item);
-            if (data === null) {
-                continue;
-            }
-            newItems.push(new PokemonBoxItem(data.iv, data.nickname));
-
-            if (newItems.length >= PokemonBox.maxEntryCount) {
-                break;
-            }
-        }
-        this._entries = newItems;
     }
 
     /**
@@ -147,6 +188,9 @@ class PokemonBox {
      * Save box data to local storage.
      */
     save() {
+        if (this.isReadonlyMode()) {
+            return;
+        }
         localStorage.setItem("PstPokeBox", JSON.stringify(this._entries
             .map(x => x.serialize())));
     }

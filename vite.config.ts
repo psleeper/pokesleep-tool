@@ -6,6 +6,9 @@ import path from 'path';
 
 export default defineConfig({
   base: '/pokesleep-tool/',
+  define: {
+    'import.meta.env.VITE_READONLY_MODE': JSON.stringify(process.env.VITE_READONLY_MODE || '')
+  },
   plugins: [eslint(), react()],
   build: {
     rollupOptions: {
