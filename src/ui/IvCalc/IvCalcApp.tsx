@@ -106,11 +106,11 @@ const ResearchCalcApp = React.memo(() => {
         {state.lowerTabIndex === 1 &&
             <BoxView items={state.box.items} iv={state.pokemonIv}
                 selectedId={state.selectedItemId} dispatch={dispatch}
-                parameter={state.parameter}/>}
+                parameter={state.parameter} box={state.box}/>}
         {state.lowerTabIndex === 2 &&
             <StrengthSettingForm value={state.parameter}
                 hasHelpingBonus={state.pokemonIv.hasHelpingBonusInActiveSubSkills}
-                dispatch={dispatch}/>}
+                dispatch={dispatch} box={state.box}/>}
         <BoxItemDialog key={state.boxItemDialogKey}
             open={state.boxItemDialogOpen} boxItem={selectedItem}
             isEdit={state.boxItemDialogIsEdit}

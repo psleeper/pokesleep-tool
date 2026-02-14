@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/system';
-import { Button, Collapse, Dialog, DialogActions, DialogTitle, DialogContent,
+import { Alert, Button, Collapse, Dialog, DialogActions, DialogTitle, DialogContent,
     FormControl, MenuItem,
     Select, SelectChangeEvent, Snackbar, Switch, Typography,
     ToggleButton, ToggleButtonGroup,
@@ -17,6 +17,7 @@ import {
     createStrengthParameter, StrengthParameter, whistlePeriod,
 } from '../../../util/PokemonStrength';
 import { useTranslation, Trans } from 'react-i18next';
+import PokemonBox from '../../../util/PokemonBox';
 
 const StyledSettingForm = styled('div')({
     padding: '0 1rem',
@@ -52,10 +53,11 @@ const StyledSettingForm = styled('div')({
     },
 });
 
-const StrengthSettingForm = React.memo(({dispatch, value, hasHelpingBonus}: {
+const StrengthSettingForm = React.memo(({dispatch, value, hasHelpingBonus, box}: {
     dispatch: React.Dispatch<IvAction>,
     value: StrengthParameter,
     hasHelpingBonus: boolean,
+    box: PokemonBox,
 }) => {
     const { t } = useTranslation();
     const [recipeBonusHelpOpen, setRecipeBonusHelpOpen] = React.useState(false);
@@ -138,6 +140,7 @@ const StrengthSettingForm = React.memo(({dispatch, value, hasHelpingBonus}: {
 
     const isNotWhistle = (value.period !== whistlePeriod);
     return <StyledSettingForm>
+        {box.isReadonlyMode() && <Alert severity="info">{t('readonly_mode_notice')}</Alert>}
         <section>
             <label>{t('period')}:</label>
             <PeriodSelect dispatch={dispatch} value={value}/>
@@ -224,9 +227,9 @@ const StrengthSettingForm = React.memo(({dispatch, value, hasHelpingBonus}: {
                 onChange={onRecipeLevelChange}
                 showSlider sx={{width: '2rem'}}/>
         </section>
-        <section className="mt">
+        {!box.isReadonlyMode() && <section className="mt">
             <Button onClick={onInitializeClick} variant="outlined">{t('initialize all parameters')}</Button>
-        </section>
+        </section>}
         <InitializeConfirmDialog open={initializeConfirmOpen} onClose={onInitializeConfirmClose}
             dispatch={dispatch}/>
         <RecipeBonusHelpDialog open={recipeBonusHelpOpen} onClose={onRecipeBonusHelpClose}/>

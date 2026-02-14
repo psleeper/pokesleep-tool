@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/system';
-import { PokemonBoxItem } from '../../../util/PokemonBox';
+import PokemonBox, { PokemonBoxItem } from '../../../util/PokemonBox';
 import BoxFilterConfig from '../../../util/PokemonBoxFilter';
 import { sortPokemonItems, BoxSortType, BoxSortConfig, loadBoxSortConfig } from '../../../util/PokemonBoxSort';
 import PokemonIcon from '../PokemonIcon';
@@ -25,11 +25,12 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import { useTranslation } from 'react-i18next';
 
-const BoxView = React.memo(({items, iv, selectedId, parameter, dispatch}: {
+const BoxView = React.memo(({items, iv, selectedId, parameter, box, dispatch}: {
     items: PokemonBoxItem[],
     iv: PokemonIv,
     selectedId: number,
     parameter: StrengthParameter,
+    box: PokemonBox,
     dispatch: (action: IvAction) => void,
 }) => {
     const { t } = useTranslation();
@@ -91,9 +92,9 @@ const BoxView = React.memo(({items, iv, selectedId, parameter, dispatch}: {
 
     let elms = React.useMemo(() => sortedItems.map((item) => (
         <BoxLargeItem key={item.id} item={item} selected={item.id === selectedId}
-            dispatch={dispatch} onCandyClick={onCandyClick}
+            dispatch={dispatch} onCandyClick={onCandyClick} readonlyMode={box.isReadonlyMode()}
             selectedRef={item.id === selectedId ? selectedRef : undefined}/>)),
-        [sortedItems, dispatch, onCandyClick, selectedId, selectedRef]);
+        [sortedItems, dispatch, onCandyClick, selectedId, selectedRef, box]);
     if (!sortConfig.descending) {
         elms = [...elms].reverse();
     }
@@ -129,10 +130,10 @@ const BoxView = React.memo(({items, iv, selectedId, parameter, dispatch}: {
             bottom: 0,
             margin: '.5rem 0 0',
         }}>
-            <Fab onClick={onAddClick} color="primary" size="medium"
+            {!box.isReadonlyMode() && <Fab onClick={onAddClick} color="primary" size="medium"
                 sx={{position: 'absolute', top: '-55px', right: '10px'}}>
                 <AddIcon/>
-            </Fab>
+            </Fab>}
             <BoxExportAlert count={items.length} config={sortConfig}
                 dispatch={dispatch} onChange={onSortConfigChange}/>
             <BoxSortConfigFooter parameter={parameter} sortConfig={sortConfig}
@@ -170,10 +171,11 @@ interface BoxLargeItemProps {
     selected: boolean;
     dispatch: (action: IvAction) => void;
     onCandyClick: (item: PokemonBoxItem) => void;
+    readonlyMode: boolean;
     selectedRef?: React.RefObject<HTMLDivElement | null>;
 }
 
-const BoxLargeItem = React.memo(({item, selected, dispatch, onCandyClick, selectedRef}: BoxLargeItemProps) => {
+const BoxLargeItem = React.memo(({item, selected, dispatch, onCandyClick, readonlyMode, selectedRef}: BoxLargeItemProps) => {
     const { t } = useTranslation();
     const [moreMenuAnchor, setMoreMenuAnchor] = React.useState<HTMLElement | null>(null);
     const isMenuOpen = Boolean(moreMenuAnchor);
@@ -213,7 +215,7 @@ const BoxLargeItem = React.memo(({item, selected, dispatch, onCandyClick, select
                 <PokemonIcon idForm={item.iv.idForm} size={32}/>
                 <footer>{item.filledNickname(t)}</footer>
             </ButtonBase>
-            {selected && <IconButton onClick={onMoreIconClick}><MoreIcon/></IconButton>}
+            {selected && !readonlyMode && <IconButton onClick={onMoreIconClick}><MoreIcon/></IconButton>}
             <Menu anchorEl={moreMenuAnchor} open={isMenuOpen}
             onClose={onMoreMenuClose} anchorOrigin={{vertical: "bottom", horizontal: "left"}}>
                 <MenuList>
