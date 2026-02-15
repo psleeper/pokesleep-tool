@@ -126,6 +126,12 @@ The `.github/workflows/deploy.yml` workflow automates readonly mode deployment t
 6. Build in readonly mode with `VITE_READONLY_MODE=true npm run build`
 7. Deploy `dist` folder to GitHub Pages
 
+**Manual Workflow Execution**:
+- The workflow includes `workflow_dispatch` trigger for manual execution
+- Can be triggered from GitHub Actions tab → Deploy workflow → Run workflow button
+- Useful for re-deploying after updating secrets or testing the deployment process
+- Executes the same build and deployment steps as automatic triggers
+
 **GitHub Secrets Configuration**:
 - `EMBEDDED_BOX_DATA` secret stores the Pokémon box JSON data to embed
 - If the secret is not configured, an empty `embedded-box.txt` is created (no build error)

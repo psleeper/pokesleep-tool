@@ -108,6 +108,21 @@ To create your own readonly mode deployment on GitHub Pages:
 
 **Note**: If the `EMBEDDED_BOX_DATA` secret is not configured, an empty `embedded-box.txt` file will be created, resulting in an empty box in readonly mode.
 
+### Manual Workflow Execution
+
+You can manually trigger the deployment workflow without pushing code or creating a pull request:
+
+1. Go to the **Actions** tab in your GitHub repository
+2. Select the **Deploy** workflow from the left sidebar
+3. Click the **Run workflow** button on the right
+4. Select the branch you want to deploy (usually `main`)
+5. Click **Run workflow** to start the deployment
+
+This is useful for:
+- Re-deploying after changing GitHub Secrets (e.g., updating `EMBEDDED_BOX_DATA`)
+- Testing the deployment process without making code changes
+- Quick deployments when needed
+
 ## License
 
 MIT
