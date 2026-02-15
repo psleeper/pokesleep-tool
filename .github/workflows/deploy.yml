@@ -34,7 +34,24 @@ jobs:
     - run: npm ci
     
     - name: Create embedded box data
-      run: echo "${{ vars.EMBEDDED_BOX_DATA }}" > embedded-box.txt
+      run: |
+        echo "Current directory: $(pwd)"
+        echo "${{ vars.EMBEDDED_BOX_DATA }}" > ${{ github.workspace }}/embedded-box.txt
+        echo "File created at: ${{ github.workspace }}/embedded-box.txt"
+        ls -la ${{ github.workspace }}/embedded-box.txt
+        echo "First 3 lines:"
+        head -3 ${{ github.workspace }}/embedded-box.txt
+    
+    - name: Verify embedded box data
+      run: |
+        if [ -f embedded-box.txt ]; then
+          echo "✅ embedded-box.txt exists"
+          wc -l embedded-box.txt
+        else
+          echo "❌ embedded-box.txt not found"
+          ls -la
+          exit 1
+        fi
     
     - run: npm test
     - run: VITE_READONLY_MODE=true npm run build
