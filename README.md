@@ -89,12 +89,13 @@ To create your own readonly mode deployment on GitHub Pages:
    - Export your Pokémon box data from the IV Calculator
    - Save the exported JSON data
 
-3. **Configure GitHub Secrets**:
+3. **Configure GitHub Variables**:
    - Go to your forked repository Settings → Secrets and variables → Actions
-   - Click "New repository secret"
-   - Create a secret named `EMBEDDED_BOX_DATA`
+   - Click the **Variables** tab
+   - Click "New repository variable"
+   - Create a variable named `EMBEDDED_BOX_DATA`
    - Paste your exported Pokémon box JSON data as the value
-   - Click "Add secret"
+   - Click "Add variable"
 
 4. **Enable GitHub Pages**:
    - Go to Settings → Pages
@@ -106,7 +107,7 @@ To create your own readonly mode deployment on GitHub Pages:
    - Once completed, your readonly mode application will be available at `https://[username].github.io/pokesleep-tool/`
    - Open the IV Calculator and verify your embedded Pokémon box data loads correctly
 
-**Note**: If the `EMBEDDED_BOX_DATA` secret is not configured, an empty `embedded-box.txt` file will be created, resulting in an empty box in readonly mode.
+**Note**: If the `EMBEDDED_BOX_DATA` variable is not configured, an empty `embedded-box.txt` file will be created, resulting in an empty box in readonly mode.
 
 ### Manual Workflow Execution
 
@@ -119,7 +120,7 @@ You can manually trigger the deployment workflow without pushing code or creatin
 5. Click **Run workflow** to start the deployment
 
 This is useful for:
-- Re-deploying after changing GitHub Secrets (e.g., updating `EMBEDDED_BOX_DATA`)
+- Re-deploying after changing GitHub Variables (e.g., updating `EMBEDDED_BOX_DATA`)
 - Testing the deployment process without making code changes
 - Quick deployments when needed
 

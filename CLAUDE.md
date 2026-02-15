@@ -121,7 +121,7 @@ The `.github/workflows/deploy.yml` workflow automates readonly mode deployment t
 1. Checkout repository code
 2. Setup Node.js 22 with npm caching
 3. Install dependencies with `npm ci`
-4. **Create embedded box data**: Writes the `EMBEDDED_BOX_DATA` secret to `embedded-box.txt`
+4. **Create embedded box data**: Writes the `EMBEDDED_BOX_DATA` variable to `embedded-box.txt`
 5. Run tests in normal mode with `npm test`
 6. Build in readonly mode with `VITE_READONLY_MODE=true npm run build`
 7. Deploy `dist` folder to GitHub Pages
@@ -132,10 +132,11 @@ The `.github/workflows/deploy.yml` workflow automates readonly mode deployment t
 - Useful for re-deploying after updating secrets or testing the deployment process
 - Executes the same build and deployment steps as automatic triggers
 
-**GitHub Secrets Configuration**:
-- `EMBEDDED_BOX_DATA` secret stores the Pokémon box JSON data to embed
-- If the secret is not configured, an empty `embedded-box.txt` is created (no build error)
-- Secret is accessed via `${{ secrets.EMBEDDED_BOX_DATA }}` in the workflow
+**GitHub Variables Configuration**:
+- `EMBEDDED_BOX_DATA` variable stores the Pokémon box JSON data to embed
+- Variables are non-masked, making them suitable for non-sensitive data like Pokémon box configurations
+- If the variable is not configured, an empty `embedded-box.txt` is created (no build error)
+- Variable is accessed via `${{ vars.EMBEDDED_BOX_DATA }}` in the workflow
 
 **Repository Owner Check**:
 - The repository_owner check has been removed from the workflow

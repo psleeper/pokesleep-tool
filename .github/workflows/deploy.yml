@@ -34,7 +34,7 @@ jobs:
     - run: npm ci
     
     - name: Create embedded box data
-      run: echo "${{ secrets.EMBEDDED_BOX_DATA }}" > embedded-box.txt
+      run: echo "${{ vars.EMBEDDED_BOX_DATA }}" > embedded-box.txt
     
     - run: npm test
     - run: VITE_READONLY_MODE=true npm run build
