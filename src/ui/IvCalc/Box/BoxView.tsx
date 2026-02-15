@@ -135,7 +135,7 @@ const BoxView = React.memo(({items, iv, selectedId, parameter, box, dispatch}: {
                 <AddIcon/>
             </Fab>}
             <BoxExportAlert count={items.length} config={sortConfig}
-                dispatch={dispatch} onChange={onSortConfigChange}/>
+                dispatch={dispatch} onChange={onSortConfigChange} box={box}/>
             <BoxSortConfigFooter parameter={parameter} sortConfig={sortConfig}
                 dispatch={dispatch} onChange={onSortConfigChange}/>
             <div style={{
@@ -347,11 +347,12 @@ const alertDaysThreshold = 30;
  */
 const boxCountDiffThreshold = 10;
 
-const BoxExportAlert = React.memo(({count, config, dispatch, onChange}: {
+const BoxExportAlert = React.memo(({count, config, dispatch, onChange, box}: {
     count: number,
     config: BoxSortConfig,
     dispatch: (action: IvAction) => void,
     onChange: (value: BoxSortConfig) => void,
+    box: PokemonBox,
 }) => {
     const { t } = useTranslation();
     const onClose = React.useCallback(() => {
@@ -380,7 +381,7 @@ const BoxExportAlert = React.memo(({count, config, dispatch, onChange}: {
     const boxIncreased = Math.abs(count - config.warnItems) >= boxCountDiffThreshold;
 
     // return empty element when no need to show message
-    if (!boxIncreased && !elapsed) {
+    if ((!boxIncreased && !elapsed) || box.isReadonlyMode()) {
         return <></>;
     }
 

@@ -95,15 +95,15 @@ const LowerTabHeader = React.memo(({
         <Menu anchorEl={moreMenuAnchor} open={isBoxMenuOpen}
             onClose={onMoreMenuClose} anchorOrigin={{vertical: "bottom", horizontal: "left"}}>
             <MenuList>
-                <MenuItem data-value="export" onClick={onMenuItemClickHandler}
+                {!state.box.isReadonlyMode() && <MenuItem data-value="export" onClick={onMenuItemClickHandler}
                     disabled={isBoxEmpty}>
                     <ListItemIcon><FileUploadIcon/></ListItemIcon>
                     {t('export')}
-                </MenuItem>
-                <MenuItem data-value="import" onClick={onMenuItemClickHandler}>
+                </MenuItem>}
+                {!state.box.isReadonlyMode() && <MenuItem data-value="import" onClick={onMenuItemClickHandler}>
                     <ListItemIcon><FileDownloadIcon/></ListItemIcon>
                     {t('import')}
-                </MenuItem>
+                </MenuItem>}
                 <Divider />
                 <MenuItem data-value="deleteAll" onClick={onMenuItemClickHandler}
                     disabled={isBoxEmpty}>
