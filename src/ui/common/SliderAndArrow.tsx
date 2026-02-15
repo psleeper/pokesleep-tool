@@ -3,10 +3,11 @@ import { styled, SxProps, Theme } from '@mui/system';
 import ArrowButton from './ArrowButton';
 import SliderEx from './SliderEx';
 
-const SliderAndArrow = React.memo(({min, max, value, onChange, sx}: {
+const SliderAndArrow = React.memo(({min, max, value, disabled, onChange, sx}: {
     min: number,
     max: number,
     value: number,
+    disabled?: boolean,
     onChange: (value: number) => void,
     sx?: SxProps<Theme>,
 }) => {
@@ -18,10 +19,10 @@ const SliderAndArrow = React.memo(({min, max, value, onChange, sx}: {
     }, [value, onChange]);
 
     return (<SliderAndArrowContainer sx={sx}>
-            <ArrowButton label="◀" disabled={value === min} onClick={onDownClick}/>
+            <ArrowButton label="◀" disabled={disabled || value === min} onClick={onDownClick}/>
             <SliderEx min={min} max={max} size="small" style={{userSelect: "none"}}
-                value={value} onChange2={onChange}/>
-            <ArrowButton label="▶" disabled={value === max} onClick={onUpClick}/>
+                disabled={disabled} value={value} onChange2={onChange}/>
+            <ArrowButton label="▶" disabled={disabled || value === max} onClick={onUpClick}/>
         </SliderAndArrowContainer>
     );
 });

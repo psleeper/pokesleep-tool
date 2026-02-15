@@ -18,24 +18,26 @@ const LevelControlContainer = styled('div')({
     },
 });
 
-const LevelControl = React.memo(({max100, value, onChange}: {
+const LevelControl = React.memo(({max100, value, disabled, onChange}: {
     max100?: boolean,
     value: number,
+    disabled?: boolean,
     onChange: (value: number) => void,
 }) => {
     const max = max100 ? 100 : maxLevel;
     return (<LevelControlContainer>
-            <LevelInput max100={max100} value={value} onChange={onChange}/>
-            <SliderAndArrow min={1} max={max} value={value} onChange={onChange}/>
+            <LevelInput max100={max100} value={value} disabled={disabled} onChange={onChange}/>
+            <SliderAndArrow min={1} max={max} value={value} disabled={disabled} onChange={onChange}/>
         </LevelControlContainer>
     );
 });
 
-export const LevelInput = React.memo(({max100, showSlider, sx, value, onChange}: {
+export const LevelInput = React.memo(({max100, showSlider, sx, value, disabled, onChange}: {
     max100?: boolean,
     showSlider?: boolean,
     sx?: SxProps<Theme>,
     value: number,
+    disabled?: boolean,
     onChange: (value: number) => void,
 }) => {
     const inputRef = React.useRef<NumericInputHandle>(null);
@@ -53,6 +55,7 @@ export const LevelInput = React.memo(({max100, showSlider, sx, value, onChange}:
         ref={inputRef}
         value={value}
         onChange={onChange}
+        disabled={disabled}
         min={1}
         max={max}
         sx={sx}>

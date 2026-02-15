@@ -5,9 +5,10 @@ import { getMaxSkillLevel } from '../../../util/MainSkill';
 import { MenuItem, TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-const SkillLevelControl = React.memo(({pokemon, value, onChange}: {
+const SkillLevelControl = React.memo(({pokemon, value, disabled, onChange}: {
     pokemon: PokemonData,
     value: number,
+    disabled?: boolean,
     onChange: (value: number) => void,
 }) => {
     const { t } = useTranslation();
@@ -27,6 +28,7 @@ const SkillLevelControl = React.memo(({pokemon, value, onChange}: {
         <span style={{marginRight: '1rem'}}>{t(`skills.${pokemon.skill}`)}</span>
         <TextField variant="standard" size="small" select
             value={value}
+            disabled={disabled}
             slotProps={{
                 select: { MenuProps: {
                     sx: { height: "400px" },

@@ -8,8 +8,9 @@ import PopperMenu from '../../common/PopperMenu';
 import TextLikeButton from '../../common/TextLikeButton';
 import { useTranslation } from 'react-i18next';
 
-const NatureTextField = React.memo(({iv, onChange}: {
+const NatureTextField = React.memo(({iv, disabled, onChange}: {
     iv: PokemonIv,
+    disabled?: boolean,
     onChange: (value: Nature) => void,
 }) => {
     const value = iv.nature;
@@ -35,6 +36,7 @@ const NatureTextField = React.memo(({iv, onChange}: {
   
     return <>
             <TextLikeButton ref={anchorRef} onClick={onClick}
+                disabled={disabled}
                 className={open ? "focused" : ""}>
                 <NatureElement value={value}/>
             </TextLikeButton>

@@ -24,10 +24,11 @@ export interface PokemonOption extends PokemonData {
     ing3Name?: IngredientName;
 }
 
-const PokemonTextField = React.memo(({iv, fixMode, onChange, onCandyClick}: {
+const PokemonTextField = React.memo(({iv, fixMode, disabled, onChange, onCandyClick}: {
     iv: PokemonIv,
     /** Fix evolutionary line or not */
     fixMode?: boolean,
+    disabled?: boolean,
     onChange: (value: string) => void,
     onCandyClick: () => void,
 }) => {
@@ -69,15 +70,15 @@ const PokemonTextField = React.memo(({iv, fixMode, onChange, onCandyClick}: {
 
     return (<div>
         {fixMode ? <>{selectedOption.localName}</> :
-        <TextLikeButton onClick={onInputClick} style={{width: '10.2rem', fontSize: '0.9rem'}}
+        <TextLikeButton onClick={onInputClick} disabled={disabled} style={{width: '10.2rem', fontSize: '0.9rem'}}
             className={open ? 'focused' : ''}>
             {selectedOption.localName.replace(/\(.+/, "")}
             {selectedOption.localName.endsWith(")") && <small>
                 {selectedOption.localName.replace(/^[^(]+/, "")}
             </small>}
         </TextLikeButton>}
-        <EvolveButton iv={iv} onChange={onChange}/>
-        <CandyButton onClick={onCandyClick}/>
+        <EvolveButton iv={iv} disabled={disabled} onChange={onChange}/>
+        <CandyButton onClick={onCandyClick} disabled={disabled}/>
         <PokemonSelectDialog open={open} onClose={onCloseDialog} onChange={changeHandler}
             pokemonOptions={pokemonOptions} selectedValue={selectedOption}/>
     </div>);
@@ -86,8 +87,9 @@ const PokemonTextField = React.memo(({iv, fixMode, onChange, onCandyClick}: {
 /**
  * Click this button to switch to other pokemon in same evolutionary line
  */
-const EvolveButton = React.memo(({iv, onChange}: {
+const EvolveButton = React.memo(({iv, disabled, onChange}: {
     iv: PokemonIv,
+    disabled?: boolean,
     onChange: (name: string) => void,
 }) => {
     const { t } = useTranslation();
@@ -126,7 +128,7 @@ const EvolveButton = React.memo(({iv, onChange}: {
     const open = Boolean(evolveButtonEl);
     return <>
         <StyledEvolveButton size="small" onClick={onEvolveClick}
-            disabled={!hasEvolutionaryLine}>
+            disabled={disabled || !hasEvolutionaryLine}>
             <AccountTreeIcon fontSize="inherit"/>
         </StyledEvolveButton>
         <Menu open={open} anchorEl={evolveButtonEl}
@@ -158,8 +160,11 @@ const StyledEvolveButton = styled(IconButton)({
 /**
  * Click this button to show candy dialog
  */
-const CandyButton = React.memo(({onClick}: {onClick: () => void}) => {
-    return <StyledCandyButton size="small" onClick={onClick}>
+const CandyButton = React.memo(({onClick, disabled}: {
+    onClick: () => void,
+    disabled?: boolean,
+}) => {
+    return <StyledCandyButton size="small" onClick={onClick} disabled={disabled}>
         <CandyIcon/>
     </StyledCandyButton>;
 });

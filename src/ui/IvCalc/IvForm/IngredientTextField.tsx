@@ -15,8 +15,9 @@ const BorderedMenuItem = styled(MenuItem)({
     },
 });
 
-const IngredientTextField = React.memo(({iv, onChange}: {
+const IngredientTextField = React.memo(({iv, disabled, onChange}: {
     iv: PokemonIv,
+    disabled?: boolean,
     onChange: (value: PokemonIv) => void,
 }) => {
     const _onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,14 +42,14 @@ const IngredientTextField = React.memo(({iv, onChange}: {
     }, [iv, onChange]);
 
     if (iv.isMythical) {
-        return MythicalIngredientTextField(iv, onChange1, onChange2, onChange3);
+        return MythicalIngredientTextField(iv, disabled, onChange1, onChange2, onChange3);
     } else {
-        return NormalIngredientTextField(iv, _onChange);
+        return NormalIngredientTextField(iv, disabled, _onChange);
     }
 });
 
 /** Ingredient text field for normal pokemon */
-function NormalIngredientTextField(iv: PokemonIv, _onChange: (e: React.ChangeEvent<HTMLInputElement>) => void) {
+function NormalIngredientTextField(iv: PokemonIv, disabled: boolean | undefined, _onChange: (e: React.ChangeEvent<HTMLInputElement>) => void) {
     // prepare menus
     const options = [];
     const values: IngredientType[] = ["AAA", "AAB", "ABA", "ABB"];
@@ -65,6 +66,7 @@ function NormalIngredientTextField(iv: PokemonIv, _onChange: (e: React.ChangeEve
     return (
         <TextField variant="standard" size="small" select
             value={iv.ingredient}
+            disabled={disabled}
             slotProps={{
                 select: { MenuProps: {
                     anchorOrigin: { vertical: "bottom", horizontal: "left" },
@@ -99,6 +101,7 @@ const PokemonIngredient = React.memo(({pokemon, value}: {
 
 /** Ingredient text field for normal pokemon */
 function MythicalIngredientTextField(iv: PokemonIv,
+    disabled: boolean | undefined,
     onChange1: (e: string) => void,
     onChange2: (e: string) => void,
     onChange3: (e: string) => void) {
@@ -132,6 +135,7 @@ function MythicalIngredientTextField(iv: PokemonIv,
         gap: '0.5rem',
     }}>
         <SelectEx value={iv.mythIng1}
+            disabled={disabled}
             sx={{paddingBottom: '0.4rem'}}
             menuSx={{
                 display: 'grid',
@@ -140,6 +144,7 @@ function MythicalIngredientTextField(iv: PokemonIv,
             {ing1Menus}
         </SelectEx>
         <SelectEx value={iv.mythIng2}
+            disabled={disabled}
             sx={{paddingBottom: '0.4rem'}}
             menuSx={{
                 display: 'grid',
@@ -148,6 +153,7 @@ function MythicalIngredientTextField(iv: PokemonIv,
             {ing2Menus}
         </SelectEx>
         <SelectEx value={iv.mythIng3}
+            disabled={disabled}
             sx={{paddingBottom: '0.4rem'}}
             menuSx={{
                 display: 'grid',

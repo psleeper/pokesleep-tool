@@ -42,9 +42,10 @@ const StyledInputForm = styled('div')({
 /**
  * Represents Pokemon IV form.
  */
-const IvForm = React.memo(({pokemonIv, fixMode, onChange}: {
+const IvForm = React.memo(({pokemonIv, fixMode, disabled, onChange}: {
     pokemonIv: PokemonIv,
     fixMode?: boolean,
+    disabled?: boolean,
     onChange: (value: PokemonIv) => void,
 }) => {
     const { t } = useTranslation();
@@ -91,12 +92,12 @@ const IvForm = React.memo(({pokemonIv, fixMode, onChange}: {
     return <StyledInputForm>
         <div className="table">
             <div>{t("pokemon")}:</div>
-            <PokemonTextField iv={pokemonIv} fixMode={fixMode}
+            <PokemonTextField iv={pokemonIv} fixMode={fixMode} disabled={disabled}
                 onChange={onPokemonNameChange} onCandyClick={onCandyClick}/>
             <div>{t("level")}:</div>
-            <LevelControl max100 value={pokemonIv.level} onChange={onLevelChange}/>
+            <LevelControl max100 value={pokemonIv.level} disabled={disabled} onChange={onLevelChange}/>
             <div>{t("ingredient")}:</div>
-            <IngredientTextField iv={pokemonIv} onChange={onChange}/>
+            <IngredientTextField iv={pokemonIv} disabled={disabled} onChange={onChange}/>
             <div>{t("frequency")}:</div>
             <div>
                 {frequencyToString(rp.frequency, t)}
@@ -108,13 +109,13 @@ const IvForm = React.memo(({pokemonIv, fixMode, onChange}: {
             {pokemonIv.carryLimit}
         </div>
         <h3>{t("Main Skill & Sub Skills")}</h3>
-        <SkillLevelControl pokemon={rp.pokemon} value={pokemonIv.skillLevel} onChange={onSkillLevelChange}/>
-        <SubSkillControl value={pokemonIv.subSkills} onChange={onSubSkillChange}/>
+        <SkillLevelControl pokemon={rp.pokemon} value={pokemonIv.skillLevel} disabled={disabled} onChange={onSkillLevelChange}/>
+        <SubSkillControl value={pokemonIv.subSkills} disabled={disabled} onChange={onSubSkillChange}/>
         <h3 className="nature">{t("additional stats")}</h3>
-        <NatureTextField iv={pokemonIv} onChange={onNatureChange}/>
+        <NatureTextField iv={pokemonIv} disabled={disabled} onChange={onNatureChange}/>
         <div style={{marginTop: '.7rem'}}>
             <span style={{paddingRight: '0.7rem'}}>{t("sleeping time shared")}:</span>
-            <SleepingTimeControl value={pokemonIv.ribbon} onChange={onRibbonChange}/>
+            <SleepingTimeControl value={pokemonIv.ribbon} disabled={disabled} onChange={onRibbonChange}/>
         </div>
         <CandyDialog iv={pokemonIv} open={candyDialogOpen}
             onChange={onChange} onClose={onCloseCandyDialog}/>

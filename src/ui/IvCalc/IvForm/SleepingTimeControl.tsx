@@ -3,8 +3,9 @@ import SelectEx from '../../common/SelectEx';
 import { MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-const SleepingTimeControl = React.memo(({value, onChange}: {
+const SleepingTimeControl = React.memo(({value, disabled, onChange}: {
     value: 0|1|2|3|4,
+    disabled?: boolean,
     onChange: (value: 0|1|2|3|4) => void,
 }) => {
     const { t } = useTranslation();
@@ -13,7 +14,7 @@ const SleepingTimeControl = React.memo(({value, onChange}: {
         onChange(parseInt(value, 10) as 0|1|2|3|4);
     }, [onChange]);
 
-    return <SelectEx value={value} onChange={_onChange}>
+    return <SelectEx value={value} disabled={disabled} onChange={_onChange}>
             <MenuItem value={0}>{t('200 hours-')}</MenuItem>
             <MenuItem value={1}>{t('200 hours+')}</MenuItem>
             <MenuItem value={2}>{t('500 hours+')}</MenuItem>

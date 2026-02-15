@@ -18,9 +18,10 @@ const StyledSubSkillContainer = styled('div')({
 });
 
 const SubSkillControl = React.memo(({
-    value, onChange,
+    value, disabled, onChange,
 }: {
     value: SubSkillList,
+    disabled?: boolean,
     onChange: (event: SubSkillChangeEvent) => void,
 }) => {
     const [open, setOpen] = React.useState(false);
@@ -40,11 +41,11 @@ const SubSkillControl = React.memo(({
     }, [setOpen]);
 
     return <StyledSubSkillContainer>
-        <SubSkillButton level={10} value={value.lv10} onClick={onClick}/>
-        <SubSkillButton level={25} value={value.lv25} onClick={onClick}/>
-        <SubSkillButton level={50} value={value.lv50} onClick={onClick}/>
-        <SubSkillButton level={75} value={value.lv75} onClick={onClick}/>
-        <SubSkillButton level={100} value={value.lv100} onClick={onClick}/>
+        <SubSkillButton level={10} value={value.lv10} disabled={disabled} onClick={onClick}/>
+        <SubSkillButton level={25} value={value.lv25} disabled={disabled} onClick={onClick}/>
+        <SubSkillButton level={50} value={value.lv50} disabled={disabled} onClick={onClick}/>
+        <SubSkillButton level={75} value={value.lv75} disabled={disabled} onClick={onClick}/>
+        <SubSkillButton level={100} value={value.lv100} disabled={disabled} onClick={onClick}/>
         <EditSubSkillDialog open={open} level={editingLevel} value={value}
             onClose={onPopupClosed} onChange={onChange} onLevelChange={onLevelChange}/>
     </StyledSubSkillContainer>;
@@ -76,9 +77,10 @@ const StyledSubSkillButton = styled(ButtonBase)(({theme}) => {
     };
 });
 
-const SubSkillButton = React.memo(({level, value, onClick}: {
+const SubSkillButton = React.memo(({level, value, disabled, onClick}: {
     level: number,
     value: SubSkill|null,
+    disabled?: boolean,
     onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) => {
     const {t} = useTranslation();
@@ -89,6 +91,7 @@ const SubSkillButton = React.memo(({level, value, onClick}: {
     else if (value?.isBlue) { color = "blue"; }
     else if (value?.isWhite) { color = "white"; }
     return <StyledSubSkillButton name={level.toString()} className={color}
+        disabled={disabled}
         onClick={onClick}>
         {label}
     </StyledSubSkillButton>;

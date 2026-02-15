@@ -16,6 +16,7 @@ const SelectEx = React.memo(({
     renderValue,
     sx,
     menuSx,
+    disabled,
     onChange
 }: {
     children: React.ReactNode | React.ReactNode[],
@@ -23,6 +24,7 @@ const SelectEx = React.memo(({
     renderValue?: (value: string | number) => React.ReactNode,
     sx?: React.CSSProperties,
     menuSx?: React.CSSProperties,
+    disabled?: boolean,
     onChange?: (value: string) => void,
 }) => {
     const [open, setOpen] = React.useState(false);
@@ -68,6 +70,7 @@ const SelectEx = React.memo(({
     return <>
         <TextLikeButton ref={anchorRef} onClick={onClick}
             style={sx}
+            disabled={disabled}
             className={open ? "focused" : ""}>
             {valueElement}
         </TextLikeButton>

@@ -189,8 +189,12 @@ const BoxLargeItem = React.memo(({item, selected, dispatch, onCandyClick, readon
         dispatch({type: "select", payload: {id: item.id}});
     }, [dispatch, item.id]);
     const onMoreIconClick = React.useCallback((event: React.MouseEvent<HTMLElement>) => {
-        setMoreMenuAnchor(event.currentTarget);
-    }, [setMoreMenuAnchor]);
+        if (readonlyMode) {
+            dispatch({type: 'edit', payload: {id: item.id}});
+        } else {
+            setMoreMenuAnchor(event.currentTarget);
+        }
+    }, [readonlyMode, dispatch, item.id, setMoreMenuAnchor]);
     const onMoreMenuClose = React.useCallback(() => {
         setMoreMenuAnchor(null);
     }, [setMoreMenuAnchor]);
@@ -215,7 +219,7 @@ const BoxLargeItem = React.memo(({item, selected, dispatch, onCandyClick, readon
                 <PokemonIcon idForm={item.iv.idForm} size={32}/>
                 <footer>{item.filledNickname(t)}</footer>
             </ButtonBase>
-            {selected && !readonlyMode && <IconButton onClick={onMoreIconClick}><MoreIcon/></IconButton>}
+            {selected && <IconButton onClick={onMoreIconClick}><MoreIcon/></IconButton>}
             <Menu anchorEl={moreMenuAnchor} open={isMenuOpen}
             onClose={onMoreMenuClose} anchorOrigin={{vertical: "bottom", horizontal: "left"}}>
                 <MenuList>

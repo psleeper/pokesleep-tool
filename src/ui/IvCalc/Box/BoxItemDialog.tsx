@@ -22,10 +22,11 @@ const Transition = React.forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const BoxItemDialog = React.memo(({open, boxItem, isEdit, onClose, onChange}: {
+const BoxItemDialog = React.memo(({open, boxItem, isEdit, readonlyMode, onClose, onChange}: {
     open: boolean,
     boxItem: PokemonBoxItem|null,
     isEdit: boolean,
+    readonlyMode: boolean,
     onClose: () => void,
     onChange: (value: PokemonBoxItem) => void,
 }) => {
@@ -38,13 +39,14 @@ const BoxItemDialog = React.memo(({open, boxItem, isEdit, onClose, onChange}: {
     return <StyledDialog open={open} onClose={onClose} fullScreen
         slots={{transition: Transition}}>
         <BoxItemDialogContent originalBoxItem={boxItem} isEdit={isEdit}
-            onClose={onClose} onChange={onChange}/>
+            readonlyMode={readonlyMode} onClose={onClose} onChange={onChange}/>
     </StyledDialog>;
 });
 
-const BoxItemDialogContent = React.memo(({originalBoxItem, isEdit, onChange, onClose}: {
+const BoxItemDialogContent = React.memo(({originalBoxItem, isEdit, readonlyMode, onChange, onClose}: {
     originalBoxItem: PokemonBoxItem,
     isEdit: boolean,
+    readonlyMode: boolean,
     onChange: (value: PokemonBoxItem) => void,
     onClose: () => void,
 }) => {
@@ -102,15 +104,16 @@ const BoxItemDialogContent = React.memo(({originalBoxItem, isEdit, onChange, onC
             <div className="icon"><PokemonIcon idForm={boxItem.iv.idForm} size={80}/></div>
             <div className="nickname">
                 <TextField variant="standard" size="small" value={displayNickName}
+                    disabled={readonlyMode}
                     onChange={onNickNameChange}
                     onFocus={onNickNameFocus}
                     onBlur={onNickNameBlur}/>
             </div>
-            <IvForm pokemonIv={boxItem.iv} fixMode={isEdit} onChange={onFormChange}/>
+            <IvForm pokemonIv={boxItem.iv} fixMode={isEdit} disabled={readonlyMode} onChange={onFormChange}/>
         </article>
         <DialogActions>
             <Button onClick={onCloseClick}>{t('close')}</Button>
-            {!isEdit && <Button onClick={onSaveClick}>{t('add')}</Button>}
+            {!isEdit && !readonlyMode && <Button onClick={onSaveClick}>{t('add')}</Button>}
         </DialogActions>
     </>;
 });

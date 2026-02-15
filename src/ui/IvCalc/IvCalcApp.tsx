@@ -114,6 +114,7 @@ const ResearchCalcApp = React.memo(() => {
         <BoxItemDialog key={state.boxItemDialogKey}
             open={state.boxItemDialogOpen} boxItem={selectedItem}
             isEdit={state.boxItemDialogIsEdit}
+            readonlyMode={state.box.isReadonlyMode()}
             onClose={onBoxItemEditDialogClose} onChange={onBoxItemDialogChange}/>
         <BoxExportDialog box={state.box}
             open={state.boxExportDialogOpen} onClose={onBoxExportDialogClose}/>
