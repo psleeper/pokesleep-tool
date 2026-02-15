@@ -126,7 +126,10 @@ class PokemonBox {
                 console.log('🔍 [DEBUG] embeddedBoxData first 100 chars:', embeddedBoxData.substring(0, 100));
                 
                 const newItems: PokemonBoxItem[] = [];
-                const lines = embeddedBoxData.split('\n').filter((line: string) => line.trim() !== '');
+                const lines = embeddedBoxData
+                    .split(/\r?\n/)  // Handle both CRLF and LF
+                    .map((line: string) => line.trim())  // Remove whitespace
+                    .filter((line: string) => line !== '');  // Remove empty lines
                 console.log('🔍 [DEBUG] Number of lines after split/filter:', lines.length);
                 console.log('🔍 [DEBUG] First 3 lines:', lines.slice(0, 3));
                 
@@ -195,6 +198,7 @@ class PokemonBox {
      * @returns      parsed data.
      */
     deserializeItem(text: string): {iv: PokemonIv, nickname: string}|null {
+        text = text.trim();  // Remove leading/trailing whitespace and newlines
         const index = text.indexOf("@");
         let ivPart = text;
         let nickname = "";
