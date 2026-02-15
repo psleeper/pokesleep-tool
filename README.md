@@ -87,21 +87,32 @@ To create your own readonly mode deployment on GitHub Pages:
 
 2. **Prepare your box data**:
    - Export your Pokémon box data from the IV Calculator
-   - Save the exported JSON data as `embedded-box.txt` in the project root
-   - Commit and push this file to your repository
+   - Save the exported JSON data
 
-3. **Configure GitHub Actions**:
-   - Go to your repository Settings → Secrets and variables → Actions
-   - Add a new repository variable named `VITE_READONLY_MODE` with value `true`
-   - Or modify `.github/workflows/deploy.yml` to include `VITE_READONLY_MODE=true` in the build command
+3. **Configure GitHub Secrets**:
+   - Go to your forked repository Settings → Secrets and variables → Actions
+   - Click "New repository secret"
+   - Create a secret named `EMBEDDED_BOX_DATA`
+   - Paste your exported Pokémon box JSON data as the value
+   - Click "Add secret"
 
-4. **Enable GitHub Pages**:
+4. **Update repository owner check**:
+   - Edit `.github/workflows/deploy.yml`
+   - Change line 18 from `if: github.repository_owner == 'nitoyon'` to `if: github.repository_owner == 'YOUR_USERNAME'`
+   - Replace `YOUR_USERNAME` with your GitHub username
+   - Commit and push this change
+
+5. **Enable GitHub Pages**:
    - Go to Settings → Pages
    - Set Source to "GitHub Actions"
-   - The site will be deployed automatically on push to the main branch
+   - Push to the main branch to trigger deployment
 
-5. **Access your deployment**:
-   - Your readonly mode application will be available at `https://[username].github.io/pokesleep-tool/`
+6. **Verify deployment**:
+   - Check Actions tab to see if the workflow runs successfully
+   - Once completed, your readonly mode application will be available at `https://[username].github.io/pokesleep-tool/`
+   - Open the IV Calculator and verify your embedded Pokémon box data loads correctly
+
+**Note**: If the `EMBEDDED_BOX_DATA` secret is not configured, an empty `embedded-box.txt` file will be created, resulting in an empty box in readonly mode.
 
 ## License
 

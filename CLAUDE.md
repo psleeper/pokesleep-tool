@@ -113,6 +113,34 @@ Readonly Mode enables embedding Pokémon box data directly into the application 
 - This file is loaded via fetch request when the app starts in readonly mode
 - The file should be created by exporting data from the IV Calculator's Box tab
 
+### GitHub Actions Deployment
+
+The `.github/workflows/deploy.yml` workflow automates readonly mode deployment to GitHub Pages.
+
+**Workflow Steps**:
+1. Checkout repository code
+2. Setup Node.js 22 with npm caching
+3. Install dependencies with `npm ci`
+4. **Create embedded box data**: Writes the `EMBEDDED_BOX_DATA` secret to `embedded-box.txt`
+5. Run tests in normal mode with `npm test`
+6. Build in readonly mode with `VITE_READONLY_MODE=true npm run build`
+7. Deploy `dist` folder to GitHub Pages
+
+**GitHub Secrets Configuration**:
+- `EMBEDDED_BOX_DATA` secret stores the Pokémon box JSON data to embed
+- If the secret is not configured, an empty `embedded-box.txt` is created (no build error)
+- Secret is accessed via `${{ secrets.EMBEDDED_BOX_DATA }}` in the workflow
+
+**Repository Owner Check**:
+- Line 18: `if: github.repository_owner == 'nitoyon'` prevents unauthorized deployments
+- Forked repositories must change `'nitoyon'` to their own GitHub username to enable deployment
+- This security measure ensures only the repository owner can trigger deployments
+
+**Environment Variables in Workflow**:
+- `VITE_READONLY_MODE=true` is set at build time to activate readonly mode
+- Tests run in normal mode (before readonly build) to validate core functionality
+- The build-time environment variable becomes available in the application code at runtime
+
 ## Key Patterns
 
 ### State Management in IvCalc
