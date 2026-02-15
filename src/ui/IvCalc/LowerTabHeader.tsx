@@ -105,11 +105,11 @@ const LowerTabHeader = React.memo(({
                     {t('import')}
                 </MenuItem>}
                 <Divider />
-                <MenuItem data-value="deleteAll" onClick={onMenuItemClickHandler}
+                {!state.box.isReadonlyMode() && <MenuItem data-value="deleteAll" onClick={onMenuItemClickHandler}
                     disabled={isBoxEmpty}>
                     <ListItemIcon><DeleteIcon /></ListItemIcon>
                     {t('delete all')}
-                </MenuItem>
+                </MenuItem>}
             </MenuList>
         </Menu>
         <AddToBoxConfirmDialog open={showAddConfirm}
