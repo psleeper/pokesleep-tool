@@ -54,7 +54,30 @@ jobs:
         fi
     
     - run: npm test
+
+    - name: Double-check embedded-box.txt before build
+      run: |
+        echo "Verifying embedded-box.txt before build..."
+        ls -la embedded-box.txt
+        wc -l embedded-box.txt
+        echo "Content preview:"
+        head -5 embedded-box.txt
+
     - run: VITE_READONLY_MODE=true npm run build
+
+    - name: Verify build output
+      run: |
+        echo "Checking dist directory..."
+        ls -la dist/
+        echo "Searching for embedded data in built JS files..."
+        grep -r "Readonly mode" dist/assets/ || echo "⚠️ Debug logs not found in build"
+        echo "Checking for non-empty box data..."
+        # Check if built JS files contain embeddedBoxData traces
+        if grep -r "embeddedBoxData" dist/assets/ > /dev/null; then
+          echo "✅ embeddedBoxData reference found in build"
+        else
+          echo "❌ embeddedBoxData reference NOT found in build"
+        fi
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v4

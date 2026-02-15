@@ -114,8 +114,13 @@ class PokemonBox {
         try {
             if (this.isReadonlyMode()) {
                 // Load from embedded data
+                console.log('🔍 [DEBUG] Readonly mode - loading embedded data');
+                console.log('🔍 [DEBUG] embeddedBoxData length:', embeddedBoxData.length);
+                console.log('🔍 [DEBUG] embeddedBoxData first 100 chars:', embeddedBoxData.substring(0, 100));
+                
                 const newItems: PokemonBoxItem[] = [];
                 const lines = embeddedBoxData.split('\n').filter((line: string) => line.trim() !== '');
+                console.log('🔍 [DEBUG] Number of lines:', lines.length);
                 for (const line of lines) {
                     const data = this.deserializeItem(line);
                     if (data === null) {
