@@ -121,29 +121,36 @@ class PokemonBox {
             
             if (this.isReadonlyMode()) {
                 // Load from embedded data
-                console.log('🔍 [DEBUG] ✅ Entering readonly mode branch');
+                console.log('🔍 [DEBUG] ✅ Readonly mode - loading embedded data');
+                console.log('🔍 [DEBUG] embeddedBoxData length:', embeddedBoxData.length);
                 console.log('🔍 [DEBUG] embeddedBoxData first 100 chars:', embeddedBoxData.substring(0, 100));
                 
                 const newItems: PokemonBoxItem[] = [];
                 const lines = embeddedBoxData.split('\n').filter((line: string) => line.trim() !== '');
-                console.log('🔍 [DEBUG] Number of lines:', lines.length);
+                console.log('🔍 [DEBUG] Number of lines after split/filter:', lines.length);
+                console.log('🔍 [DEBUG] First 3 lines:', lines.slice(0, 3));
                 
-                for (const line of lines) {
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i];
+                    console.log(`🔍 [DEBUG] Processing line ${i}: "${line.substring(0, 30)}..."`);
                     const data = this.deserializeItem(line);
                     if (data === null) {
-                        console.log('🔍 [DEBUG] ⚠️ Failed to deserialize line:', line.substring(0, 50));
+                        console.log(`🔍 [DEBUG] ❌ Failed to deserialize line ${i}`);
                         continue;
                     }
+                    console.log(`🔍 [DEBUG] ✅ Successfully deserialized line ${i}, nickname: "${data.nickname}"`);
                     newItems.push(new PokemonBoxItem(data.iv, data.nickname));
-                    console.log('🔍 [DEBUG] Successfully added item, total:', newItems.length);
+                    console.log(`🔍 [DEBUG] newItems.length is now: ${newItems.length}`);
 
                     if (newItems.length >= PokemonBox.maxEntryCount) {
                         break;
                     }
                 }
-                console.log('🔍 [DEBUG] Final newItems count:', newItems.length);
+                
+                console.log('🔍 [DEBUG] Before assignment - newItems.length:', newItems.length);
                 this._entries = newItems;
-                console.log('🔍 [DEBUG] this._entries count:', this._entries.length);
+                console.log('🔍 [DEBUG] After assignment - this._entries.length:', this._entries.length);
+                console.log('🔍 [DEBUG] Readonly mode load complete!');
             } else {
                 // Load from localStorage
                 console.log('🔍 [DEBUG] ❌ Entering localStorage branch (NOT readonly mode)');
@@ -178,6 +185,8 @@ class PokemonBox {
             console.warn('Failed to load Pokemon box data:', error);
             return [];
         }
+        console.log('🔍 [DEBUG] load() returning, this._entries.length:', this._entries.length);
+        return this._entries;
     }
 
     /**
@@ -193,11 +202,14 @@ class PokemonBox {
             ivPart = text.substring(0, index);
             nickname = text.substring(index + 1);
         }
+        console.log(`🔍 [DEBUG] deserializeItem - ivPart: "${ivPart}", nickname: "${nickname}"`);
         try {
             const iv = PokemonIv.deserialize(ivPart);
+            console.log(`🔍 [DEBUG] deserializeItem - SUCCESS`);
             return {iv, nickname};
         }
-        catch {
+        catch (e) {
+            console.log(`🔍 [DEBUG] deserializeItem - FAILED:`, e);
             return null;
         }
     }
