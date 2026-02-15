@@ -132,9 +132,9 @@ The `.github/workflows/deploy.yml` workflow automates readonly mode deployment t
 - Secret is accessed via `${{ secrets.EMBEDDED_BOX_DATA }}` in the workflow
 
 **Repository Owner Check**:
-- Line 18: `if: github.repository_owner == 'nitoyon'` prevents unauthorized deployments
-- Forked repositories must change `'nitoyon'` to their own GitHub username to enable deployment
-- This security measure ensures only the repository owner can trigger deployments
+- The repository_owner check has been removed from the workflow
+- Forked repositories can now deploy automatically without any configuration changes
+- Any fork can trigger deployments when pushing to main or merging PRs
 
 **Environment Variables in Workflow**:
 - `VITE_READONLY_MODE=true` is set at build time to activate readonly mode

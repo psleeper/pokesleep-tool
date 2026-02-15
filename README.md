@@ -96,18 +96,12 @@ To create your own readonly mode deployment on GitHub Pages:
    - Paste your exported Pokémon box JSON data as the value
    - Click "Add secret"
 
-4. **Update repository owner check**:
-   - Edit `.github/workflows/deploy.yml`
-   - Change line 18 from `if: github.repository_owner == 'nitoyon'` to `if: github.repository_owner == 'YOUR_USERNAME'`
-   - Replace `YOUR_USERNAME` with your GitHub username
-   - Commit and push this change
-
-5. **Enable GitHub Pages**:
+4. **Enable GitHub Pages**:
    - Go to Settings → Pages
    - Set Source to "GitHub Actions"
    - Push to the main branch to trigger deployment
 
-6. **Verify deployment**:
+5. **Verify deployment**:
    - Check Actions tab to see if the workflow runs successfully
    - Once completed, your readonly mode application will be available at `https://[username].github.io/pokesleep-tool/`
    - Open the IV Calculator and verify your embedded Pokémon box data loads correctly
